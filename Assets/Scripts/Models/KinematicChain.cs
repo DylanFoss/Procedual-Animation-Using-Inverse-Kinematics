@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class KinematicChain
 {
+
     public int length;
     public List<Segment> segments;
-    public Vector3 end;
+
+    public List<Vector3> points;
+    public List<Transform> bones;
+    public List<float> lengths;
 
     public KinematicChain(int length)
     {
+
         segments = new List<Segment>();
         this.length = length;
 
@@ -18,8 +23,10 @@ public class KinematicChain
             addSegment();
         }
 
-        end = new Vector3(0, 0 + segments.Count * segments[segments.Count - 1].length, 0);
-        Debug.Log(end);
+        segments.Add(
+                new Segment(0,
+                new Vector3(0, 0 + segments.Count * segments[segments.Count - 1].length, 0),
+                new Vector3(0, 0.5f + segments[segments.Count - 1].length, 0)));
     }
 
     public void addSegment()
@@ -51,20 +58,19 @@ public class KinematicChain
 
     const int maxIterations = 100;
     const float minDistance = 0.01f;
-    public Vector3[] Solve(Vector3 target)
+    public Vector3[] Solve(Vector3 target) 
     {
-        //TODO: end point should be made on generation. not have to be placed here.
-        Vector3[] points = new Vector3[segments.Count + 1];
+
+        Vector3[] points = new Vector3[segments.Count];
         for (int i = 0; i < segments.Count; i++)
         {
             points[i] = segments[i].joint;
         }
-        points[segments.Count] = end;
 
 
         //TODO: could use pre saved lengths instead of working them out at runtime (should be minor overhead)
-        float[] lengths = new float[segments.Count];
-        for (int i = 0; i < segments.Count; i++)
+        float[] lengths = new float[segments.Count-1];
+        for (int i = 0; i < segments.Count-1; i++)
         {
             lengths[i] = (points[i + 1] - points[i]).magnitude;
         }
@@ -74,14 +80,7 @@ public class KinematicChain
 
         for (int i = 0; i < maxIterations; i++)
         {
-            // bool startFromTarget = i % 2 == 0;
-            //TODO: don't use these.
-            //System.Array.Reverse(lengths);
-            //System.Array.Reverse(points);
-            //points[0] = (startFromTarget) ? target : origin;
-
             points = Forwards(points, lengths, target);
-
             points = Backwards(points, lengths, origin);
 
             float distanceFromTarget = (points[points.Length - 1] - target).magnitude;
