@@ -12,14 +12,13 @@ public class KinematicChainManager : MonoBehaviour
 
     public GameObject endEffector;
 
-    public List<Vector3> points;
-    public List<Transform> bones;
-    public List<float> lengths;
+    private List<Vector3> points;
+    private List<Transform> bones;
+    private List<float> lengths;
 
     private void Init()
     {
-        length = 2;
-
+        length = 5;
     }
 
     // Start is called before the first frame update
