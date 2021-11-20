@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class IKSolver : MonoBehaviour
 {
     public int length;
 
     public GameObject endEffector;
+    public GameObject pole;
 
     public int iterations = 100;
     public float minDistance = 0.01f;
-
-    public GameObject[] stuff;
 
     protected Transform[] bones;
     protected float[] lengths;
@@ -71,6 +71,25 @@ public class IKSolver : MonoBehaviour
         Solve();
     }
 
+    private void OnValidate()
+    {
+        Init();
+    }
+
+    private void OnDrawGizmos()
+    {
+        var current = this.transform;
+        for (int i = 0; i < length && current != null && current.parent != null; i++)
+        {
+            var scale = Vector3.Distance(current.position, current.parent.position) * 0.1f;
+            Handles.matrix = Matrix4x4.TRS(current.position, Quaternion.FromToRotation(Vector3.up, current.parent.position - current.position), new Vector3(scale, Vector3.Distance(current.parent.position, current.position), scale));
+            Handles.color = Color.green;
+            Handles.DrawWireCube(Vector2.up * 0.5f, Vector3.one);
+            current = current.parent;
+        }
+
+    }
+
     //TODO: could add check for if it's impossible to reach, then strech rather than waiting through each iteration.
     public void Solve()
     {
@@ -100,6 +119,19 @@ public class IKSolver : MonoBehaviour
                 break;
             }
 
+        }
+
+        // code for pole target
+        if (pole != null)
+        {
+            for (int i = 1; i < points.Length - 1; i++)
+            {
+                Plane plane = new Plane(points[i + 1] - points[i - 1], points[i - 1]);
+                Vector3 projectedPole = plane.ClosestPointOnPlane(pole.transform.position);
+                Vector3 projectedBone = plane.ClosestPointOnPlane(points[i]);
+                float angle = Vector3.SignedAngle(projectedBone - points[i - 1], projectedPole - points[i - 1], plane.normal);
+                points[i] = Quaternion.AngleAxis(angle, plane.normal) * (points[i] - points[i - 1]) + points[i - 1];
+            }
         }
 
         for (int i = 0; i < points.Length; i++)
