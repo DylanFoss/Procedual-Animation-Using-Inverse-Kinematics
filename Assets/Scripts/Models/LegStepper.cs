@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class LegStepper : MonoBehaviour
 {
+
     [SerializeField] private Transform homeTransform;
 
     [SerializeField] private float stepAtDistance;
@@ -54,6 +56,11 @@ public class LegStepper : MonoBehaviour
     void Update()
     {
 
+
+    }
+
+    public void TryMove()
+    {
         // If we are already moving, don't start another move
         if (moving) return;
 
@@ -65,6 +72,16 @@ public class LegStepper : MonoBehaviour
             // Start the step coroutine
             StartCoroutine(MoveToHome());
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Handles.color = Vector3.Distance(transform.position, homeTransform.position) > stepAtDistance ? Color.red : Color.green;
+
+        Handles.DrawLine(transform.position, homeTransform.position);
+        Handles.DrawWireDisc(transform.position, new Vector3(0, 1, 0), stepAtDistance);
+      //  Handles.DrawWireDisc(transform.position, new Vector3(0, 0, 1), stepAtDistance);
+       // Handles.DrawWireDisc(transform.position, new Vector3(1, 0, 0), stepAtDistance);
 
     }
 }

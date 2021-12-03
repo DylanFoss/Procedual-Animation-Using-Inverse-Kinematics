@@ -10,11 +10,11 @@ public class FloorRaycast : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //transform.rotation = new Quaternion(0, 0, -90f, 0);
-        Ray ray = new Ray(transform.position, Vector3.down);
+        Ray ray = new Ray(new Vector3 (transform.position.x, transform.position.y + 5, transform.position.z), Vector3.down);
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
         {
+            transform.position = hitInfo.point;
             Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
         }
         else 

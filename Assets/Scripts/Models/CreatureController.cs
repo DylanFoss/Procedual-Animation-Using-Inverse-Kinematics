@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CreatureController : MonoBehaviour
 {
+    [SerializeField] LegStepper one;
+    [SerializeField] LegStepper two;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -13,9 +17,7 @@ public class CreatureController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("space"))
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z+1);
-        }
+        one.TryMove();
+        two.TryMove();
     }
 }
