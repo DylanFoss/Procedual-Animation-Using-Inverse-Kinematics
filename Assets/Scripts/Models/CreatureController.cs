@@ -4,20 +4,49 @@ using UnityEngine;
 
 public class CreatureController : MonoBehaviour
 {
-    [SerializeField] LegStepper one;
-    [SerializeField] LegStepper two;
+    [SerializeField] LegStepper FRL;
+    [SerializeField] LegStepper FLL;
+
+    [SerializeField] LegStepper MRL;
+    [SerializeField] LegStepper MLL;
+
+    [SerializeField] LegStepper RRL;
+    [SerializeField] LegStepper RLL;
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        StartCoroutine(LegUpdateCoroutine());
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator LegUpdateCoroutine()
     {
-        one.TryMove();
-        two.TryMove();
+        while (true)
+        {
+            do
+            {
+                FRL.TryMove();
+                MLL.TryMove();
+                RRL.TryMove();
+                yield return null;
+            }
+            while (FRL.moving || MLL.moving || RRL.moving);
+
+            do
+            {
+                FLL.TryMove();
+                MRL.TryMove();
+                RLL.TryMove();
+                yield return null;
+            }
+            while (FLL.moving || MRL.moving || RLL.moving);
+        }
     }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
 }
