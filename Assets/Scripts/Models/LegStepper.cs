@@ -12,6 +12,8 @@ public class LegStepper : MonoBehaviour
 
     [SerializeField] private float moveDuration;
 
+    [SerializeField] float stepOvershootFraction;
+
     public bool moving;
 
     IEnumerator MoveToHome()
@@ -22,7 +24,21 @@ public class LegStepper : MonoBehaviour
         Vector3 startPoint = transform.position;
 
         Quaternion endRot = homeTransform.rotation;
-        Vector3 endPoint = homeTransform.position;
+
+        // overshooting our end postion for more natrual movement
+
+        Vector3 towardHome = (homeTransform.position - transform.position);
+
+        float overshootDistance = stepAtDistance * stepOvershootFraction;
+        Vector3 overshootVector = towardHome * overshootDistance;
+
+        overshootVector = Vector3.ProjectOnPlane(overshootVector, Vector3.up);
+
+        //Vector3 endPoint = homeTransform.position;
+        Vector3 endPoint = homeTransform.position + overshootVector;
+
+        Vector3 centerPoint = (startPoint + endPoint) / 2;
+        centerPoint += homeTransform.up * Vector3.Distance(startPoint, endPoint) / 2f;
 
         float timeElapsed = 0;
 
@@ -34,11 +50,21 @@ public class LegStepper : MonoBehaviour
                 float normalizedTime = timeElapsed / moveDuration;
 
                 // Interpolate position and rotation
-                transform.position = Vector3.Lerp(startPoint, endPoint, normalizedTime);
+               // transform.position = Vector3.Lerp(startPoint, endPoint, normalizedTime);
                 transform.rotation = Quaternion.Slerp(startRot, endRot, normalizedTime);
 
-                // Wait for one frame
-                yield return null;
+                // Quadratic bezier curve
+                transform.position =
+                  Vector3.Lerp(
+                    Vector3.Lerp(startPoint, centerPoint, normalizedTime),
+                    Vector3.Lerp(centerPoint, endPoint, normalizedTime),
+                    normalizedTime
+                  );
+
+                transform.rotation = Quaternion.Slerp(startRot, endRot, normalizedTime);
+
+            // Wait for one frame
+            yield return null;
         }
         while (timeElapsed < moveDuration) ;
 
