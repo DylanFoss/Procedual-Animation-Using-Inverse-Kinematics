@@ -93,6 +93,7 @@ public class IKSolver : MonoBehaviour
     //TODO: could add check for if it's impossible to reach, then strech rather than waiting through each iteration.
     public void Solve()
     {
+
         if (endEffector == null) // no end effector? nothing to solve!
             return;
 
@@ -106,31 +107,42 @@ public class IKSolver : MonoBehaviour
 
 
         Vector3 origin = points[0];
-        Vector3 target = endEffector.transform.position; 
+        Vector3 target = endEffector.transform.position;
 
-        for (int i = 0; i < iterations; i++)
+        // check if this is impossible to solve
+        if (Vector3.Distance(target, points[0]) > cumLength)
         {
-            Forwards(target);
-            Backwards(origin);
+            var d = (endEffector.transform.position - points[0]).normalized;
 
-            float distanceFromTarget = (points[points.Length - 1] - target).magnitude;
-            if (distanceFromTarget <= minDistance)
+            for (int i = 1; i < points.Length; i++)
+                points[i] = points[i - 1] + d * lengths[i-1];
+        }
+        else
+        {
+            for (int i = 0; i < iterations; i++)
             {
-                break;
+                Forwards(target);
+                Backwards(origin);
+
+                float distanceFromTarget = (points[points.Length - 1] - target).magnitude;
+                if (distanceFromTarget <= minDistance)
+                {
+                    break;
+                }
+
             }
 
-        }
-
-        // code for pole target
-        if (pole != null)
-        {
-            for (int i = 1; i < points.Length - 1; i++)
+            // code for pole target
+            if (pole != null)
             {
-                Plane plane = new Plane(points[i + 1] - points[i - 1], points[i - 1]);
-                Vector3 projectedPole = plane.ClosestPointOnPlane(pole.transform.position);
-                Vector3 projectedBone = plane.ClosestPointOnPlane(points[i]);
-                float angle = Vector3.SignedAngle(projectedBone - points[i - 1], projectedPole - points[i - 1], plane.normal);
-                points[i] = Quaternion.AngleAxis(angle, plane.normal) * (points[i] - points[i - 1]) + points[i - 1];
+                for (int i = 1; i < points.Length - 1; i++)
+                {
+                    Plane plane = new Plane(points[i + 1] - points[i - 1], points[i - 1]);
+                    Vector3 projectedPole = plane.ClosestPointOnPlane(pole.transform.position);
+                    Vector3 projectedBone = plane.ClosestPointOnPlane(points[i]);
+                    float angle = Vector3.SignedAngle(projectedBone - points[i - 1], projectedPole - points[i - 1], plane.normal);
+                    points[i] = Quaternion.AngleAxis(angle, plane.normal) * (points[i] - points[i - 1]) + points[i - 1];
+                }
             }
         }
 

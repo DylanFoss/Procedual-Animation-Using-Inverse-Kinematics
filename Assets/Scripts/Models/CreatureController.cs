@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class CreatureController : MonoBehaviour
 {
+    //TODO: get legs into a data structure
+    //TODO: force leg side priotrities to alternate
+    //TODO: implement support for multiple gaits
+    //TODO: implement debug flags to turn certain debug visuals on and off
+
+
     [SerializeField] LegStepper FRL;
     [SerializeField] LegStepper FLL;
 
