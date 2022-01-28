@@ -360,6 +360,7 @@ MonoBehaviour:
   homeTransform: {fileID: 629499633}
   stepAtDistance: 2
   moveDuration: 0.1
+  stepOvershootFraction: 0
   moving: 0
 --- !u!1 &84477001
 GameObject:
@@ -982,6 +983,7 @@ MonoBehaviour:
   homeTransform: {fileID: 1511625851}
   stepAtDistance: 2
   moveDuration: 0.1
+  stepOvershootFraction: 0
   moving: 0
 --- !u!1 &379302170
 GameObject:
@@ -1029,6 +1031,7 @@ MonoBehaviour:
   homeTransform: {fileID: 563731541}
   stepAtDistance: 2
   moveDuration: 0.1
+  stepOvershootFraction: 0
   moving: 0
 --- !u!1 &446159515
 GameObject:
@@ -2722,6 +2725,7 @@ MonoBehaviour:
   homeTransform: {fileID: 91650564}
   stepAtDistance: 2
   moveDuration: 0.1
+  stepOvershootFraction: 0
   moving: 0
 --- !u!1 &1079025943
 GameObject:
@@ -2735,7 +2739,6 @@ GameObject:
   - component: {fileID: 1079025948}
   - component: {fileID: 1079025947}
   - component: {fileID: 1079025946}
-  - component: {fileID: 1079025945}
   m_Layer: 0
   m_Name: BamzookiDoublePrime
   m_TagString: Untagged
@@ -2769,24 +2772,6 @@ Transform:
   m_Father: {fileID: 1984554771}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1079025945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079025943}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e86fdc2ae20d95043b3518901cfa3103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FRL: {fileID: 1564659036}
-  FLL: {fileID: 379302172}
-  MRL: {fileID: 73665095}
-  MLL: {fileID: 320154559}
-  RRL: {fileID: 1913116164}
-  RLL: {fileID: 1074926757}
 --- !u!65 &1079025946
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3995,6 +3980,7 @@ MonoBehaviour:
   homeTransform: {fileID: 118353312}
   stepAtDistance: 2
   moveDuration: 0.1
+  stepOvershootFraction: 0
   moving: 0
 --- !u!1 &1596729735
 GameObject:
@@ -4556,6 +4542,7 @@ MonoBehaviour:
   homeTransform: {fileID: 2133251000}
   stepAtDistance: 2
   moveDuration: 0.1
+  stepOvershootFraction: 0
   moving: 0
 --- !u!1 &1926671454
 GameObject:
@@ -4891,12 +4878,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86fdc2ae20d95043b3518901cfa3103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FRL: {fileID: 0}
-  FLL: {fileID: 0}
-  MRL: {fileID: 0}
-  MLL: {fileID: 0}
-  RRL: {fileID: 0}
-  RLL: {fileID: 0}
+  FRL: {fileID: 1564659036}
+  FLL: {fileID: 379302172}
+  MRL: {fileID: 73665095}
+  MLL: {fileID: 320154559}
+  RRL: {fileID: 1913116164}
+  RLL: {fileID: 1074926757}
 --- !u!4 &1984554771
 Transform:
   m_ObjectHideFlags: 0
