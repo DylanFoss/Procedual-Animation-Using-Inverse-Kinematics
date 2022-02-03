@@ -5,6 +5,8 @@ using UnityEditor;
 
 public class LegStepper : MonoBehaviour
 {
+    //TODO: Overshoot to be based on speed?
+    //TODO: Overshoot currently can overshoot into floors/walls. Raycasts and/or velocity checks to correct this?
 
     [SerializeField] private Transform homeTransform;
 
@@ -15,6 +17,17 @@ public class LegStepper : MonoBehaviour
     [SerializeField] float stepOvershootFraction;
 
     public bool moving;
+
+    public float X
+    {
+        get { return transform.position.x; }
+    }
+
+    public float Y
+    {
+        get { return transform.position.y; }
+    }
+
 
     IEnumerator MoveToHome()
     {
@@ -53,7 +66,7 @@ public class LegStepper : MonoBehaviour
                // transform.position = Vector3.Lerp(startPoint, endPoint, normalizedTime);
                 transform.rotation = Quaternion.Slerp(startRot, endRot, normalizedTime);
 
-                // Quadratic bezier curve
+                // Quadratic bezier curve, look at over curves
                 transform.position =
                   Vector3.Lerp(
                     Vector3.Lerp(startPoint, centerPoint, normalizedTime),
