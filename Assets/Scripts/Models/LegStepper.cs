@@ -28,6 +28,11 @@ public class LegStepper : MonoBehaviour
         get { return transform.position.y; }
     }
 
+    public float DistanceFromHome
+    {
+        get { return Mathf.Abs((transform.position - homeTransform.position).magnitude); }
+    }
+
 
     IEnumerator MoveToHome()
     {

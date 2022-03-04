@@ -8,11 +8,26 @@ public class FloorRaycast : MonoBehaviour
     private int layerMask = 1 << 3;
 
     private Transform lastTransform;
+    private Vector3 rest;
+
+    private void Start()
+    {
+        //lastTransform = transform;
+
+
+        Ray ray = new Ray(new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Vector3.down);
+        RaycastHit hitInfo;
+        Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask);
+        rest = hitInfo.point;
+        transform.position = rest;
+
+    }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        lastTransform = transform;
+        //lastTransform.position = rest.position;
+
 
         Ray ray = new Ray(new Vector3 (transform.position.x, transform.position.y + 5, transform.position.z), Vector3.down);
         RaycastHit hitInfo;
@@ -26,6 +41,6 @@ public class FloorRaycast : MonoBehaviour
             Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100, Color.green);
         }
 
-        transform.position = lastTransform.position;
+        //transform.position = lastTransform.position;
     }
 }
