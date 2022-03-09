@@ -8,13 +8,21 @@ public class LegStepper : MonoBehaviour
     //TODO: Overshoot to be based on speed?
     //TODO: Overshoot currently can overshoot into floors/walls. Raycasts and/or velocity checks to correct this?
 
+    [SerializeField] private Transform root;
+
     [SerializeField] private Transform homeTransform;
+
+    [SerializeField] private Transform rayTransform;
+
+    //private Vector3 rayPoint;
 
     [SerializeField] private float stepAtDistance;
 
     [SerializeField] private float moveDuration;
 
     [SerializeField] float stepOvershootFraction;
+
+    [SerializeField] private int layerMask = 1 << 8;
 
     public bool moving;
 
@@ -91,16 +99,24 @@ public class LegStepper : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void OnEnable()
     {
-        
+       // epic.parent = root;
+        //epic.position = homeTransform.position;
+        FloorRaycast();
+    }
+
+    public void Start()
+    {
+        //epic.parent = root;
+       // epic.position = homeTransform.position;
+        FloorRaycast();
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
-
-
+        FloorRaycast();
     }
 
     public void TryMove()
@@ -118,14 +134,33 @@ public class LegStepper : MonoBehaviour
         }
     }
 
+    public void FloorRaycast()
+    {
+        Ray ray = new Ray(new Vector3(rayTransform.position.x, rayTransform.position.y + 5, rayTransform.position.z), Vector3.down);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
+        {
+            homeTransform.position = hitInfo.point;
+            Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
+        }
+        else
+        {
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 100, Color.green);
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Handles.color = Vector3.Distance(transform.position, homeTransform.position) > stepAtDistance ? Color.red : Color.green;
 
         Handles.DrawLine(transform.position, homeTransform.position);
         Handles.DrawWireDisc(transform.position, new Vector3(0, 1, 0), stepAtDistance);
-      //  Handles.DrawWireDisc(transform.position, new Vector3(0, 0, 1), stepAtDistance);
-       // Handles.DrawWireDisc(transform.position, new Vector3(1, 0, 0), stepAtDistance);
+        Handles.DrawWireDisc(transform.position, new Vector3(0, 0, 1), stepAtDistance);
+        Handles.DrawWireDisc(transform.position, new Vector3(1, 0, 0), stepAtDistance);
+
+        Handles.color = Color.blue;
+
+        Handles.DrawWireCube(rayTransform.position, new Vector3(0.5f, 0.5f, 0.5f));
 
     }
 }
