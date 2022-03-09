@@ -21,9 +21,9 @@ public class CreatureController : MonoBehaviour
     [SerializeField] float turnSpeed;
     [SerializeField] float turnAcceleration;
 
-    [SerializeField] float maxAngleToTarget;
-    [SerializeField] float maxDistToTarget;
-    [SerializeField] float minDistToTarget;
+    private float maxAngleToTarget;
+    private float maxDistToTarget;
+    private float minDistToTarget;
 
     [SerializeField] float damper;
 
@@ -131,7 +131,7 @@ public class CreatureController : MonoBehaviour
 
         // change root height based on leg heights
 
-        //orientBodyOffset();
+        orientBodyOffset();
 
         //this code is evil and WILL release daemons into this dimension. Use at own risk.
 
@@ -139,7 +139,7 @@ public class CreatureController : MonoBehaviour
 
         ////front back rotation
 
-       // orientBodyFrontBack();
+        orientBodyFrontBack();
     }
 
     public void targetMovement()
@@ -259,6 +259,8 @@ public class CreatureController : MonoBehaviour
         root.transform.position += currentVelocity * Time.deltaTime;
     }
 
+    float speed = 0;
+
     public void orientBodyOffset()
     {
         float averageHeight = 0;
@@ -277,7 +279,8 @@ public class CreatureController : MonoBehaviour
 
         float heightOffset = distanceFromGround;
 
-        root.position = new Vector3(root.position.x, heightOffset + offset, root.position.z);
+        //root.position = new Vector3(root.position.x, heightOffset + offset, root.position.z);
+        root.position = new Vector3(root.position.x, Mathf.SmoothDamp(root.position.y,  heightOffset + offset , ref speed, 0.2f), root.position.z);
     }
 
     /// <summary>

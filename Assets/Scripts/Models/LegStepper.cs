@@ -79,7 +79,7 @@ public class LegStepper : MonoBehaviour
                // transform.position = Vector3.Lerp(startPoint, endPoint, normalizedTime);
                 transform.rotation = Quaternion.Slerp(startRot, endRot, normalizedTime);
 
-                // Quadratic bezier curve, look at over curves
+                // Quadratic bezier curve, nice and easy to set up custom steps for.
                 transform.position =
                   Vector3.Lerp(
                     Vector3.Lerp(startPoint, centerPoint, normalizedTime),
