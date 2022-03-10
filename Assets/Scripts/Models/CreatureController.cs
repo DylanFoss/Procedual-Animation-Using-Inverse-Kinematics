@@ -11,7 +11,6 @@ public class CreatureController : MonoBehaviour
     //TODO: implement debug flags to turn certain debug visuals on and off
 
     // root body variables
-
     [SerializeField] float distanceFromGround;
     [SerializeField] float desiredDistanceFromGround;
 
@@ -25,10 +24,10 @@ public class CreatureController : MonoBehaviour
     private float maxDistToTarget;
     private float minDistToTarget;
 
-    [SerializeField] float damper;
-
     Vector3 currentVelocity;
     float currentAngularVelocity;
+
+    [SerializeField] float damper;
 
     [SerializeField] Transform root;
     [SerializeField] Transform target;
@@ -40,16 +39,22 @@ public class CreatureController : MonoBehaviour
 
     // to be replaced by arrays above
 
-    [SerializeField] LegStepper FRL;
-    [SerializeField] LegStepper FLL;
+    //[SerializeField] LegStepper FRL;
+    //[SerializeField] LegStepper FLL;
 
-    [SerializeField] LegStepper MRL;
-    [SerializeField] LegStepper MLL;
+    //[SerializeField] LegStepper MRL;
+   // [SerializeField] LegStepper MLL;
 
-    [SerializeField] LegStepper RRL;
-    [SerializeField] LegStepper RLL;
+   // [SerializeField] LegStepper RRL;
+    //[SerializeField] LegStepper RLL;
 
     //public AnimationCurve sensitivityCurve;
+
+    enum Gait
+    {
+        Alternate,
+        Wave
+    }
 
 
     // Start is called before the first frame update
@@ -58,18 +63,91 @@ public class CreatureController : MonoBehaviour
         StartCoroutine(LegUpdateCoroutine());
     }
 
+    public float tripodGaitDistance(bool lr)
+    {
+        float distance = 0;
+
+        if (lr == false)
+        {
+            for (int i = 0; i < leftLegs.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    distance += leftLegs[i].DistanceFromHome;
+                }
+                else
+                {
+                    distance += rightLegs[i].DistanceFromHome;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < leftLegs.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    distance += rightLegs[i].DistanceFromHome;
+                }
+                else
+                {
+                    distance += leftLegs[i].DistanceFromHome;
+                }
+            }
+        }
+
+        return distance;
+    }
+
+    public bool tripodGaitIsMoving(bool lr)
+    {
+        bool isMoving = false;
+
+        if (lr == false)
+        {
+            for (int i = 0; i < leftLegs.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    if (leftLegs[i].moving)
+                        isMoving = true;
+                }
+                else
+                {
+                    if (rightLegs[i].moving)
+                        isMoving = true;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < leftLegs.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    if (rightLegs[i].moving)
+                        isMoving = true;
+                }
+                else
+                {
+                    if (leftLegs[i].moving)
+                        isMoving = true;
+                }
+            }
+        }
+
+        return isMoving;
+    }
+
     IEnumerator LegUpdateCoroutine()
     {
 
         while (true)
         {
-            if ((FRL.DistanceFromHome + MLL.DistanceFromHome + RRL.DistanceFromHome) / 3 > (FLL.DistanceFromHome + MRL.DistanceFromHome + RLL.DistanceFromHome) / 3)
+            if (tripodGaitDistance(true) / 3 > tripodGaitDistance(false) / 3)
             {
                 do
                 {
-                    //FRL.TryMove();
-                    //MLL.TryMove();
-                    //RRL.TryMove();
 
                     for (int i = 0; i < leftLegs.Length; i++)
                     {
@@ -85,16 +163,12 @@ public class CreatureController : MonoBehaviour
 
                     yield return null;
                 }
-                while (FRL.moving || MLL.moving || RRL.moving);
+                while (tripodGaitIsMoving(true));
             }
             else
             {
                 do
                 {
-                    //FLL.TryMove();
-                    //MRL.TryMove();
-                    //RLL.TryMove();
-
                     for (int i = 0; i < leftLegs.Length; i++)
                     {
                         if (i % 2 == 0)
@@ -109,7 +183,7 @@ public class CreatureController : MonoBehaviour
 
                     yield return null;
                 }
-                while (FLL.moving || MRL.moving || RLL.moving);
+                while (tripodGaitIsMoving(false));
             }
         }
     }
