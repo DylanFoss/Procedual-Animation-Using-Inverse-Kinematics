@@ -22,7 +22,10 @@ public class LegStepper : MonoBehaviour
 
     [SerializeField] float stepOvershootFraction;
 
+    [SerializeField] float stepHeight = 0.5f;
+
     [SerializeField] private int layerMask = 1 << 8;
+
 
     public bool moving;
 
@@ -64,7 +67,7 @@ public class LegStepper : MonoBehaviour
         Vector3 endPoint = homeTransform.position + overshootVector;
 
         Vector3 centerPoint = (startPoint + endPoint) / 2;
-        centerPoint += homeTransform.up * Vector3.Distance(startPoint, endPoint) / 2f;
+        centerPoint += homeTransform.up * Vector3.Distance(startPoint, endPoint) * stepHeight;
 
         float timeElapsed = 0;
 

@@ -347,7 +347,7 @@ public class CreatureController : MonoBehaviour
         //float averageHeight = (FRL.transform.position.y + FLL.transform.position.y + MRL.transform.position.y + MLL.transform.position.y + RRL.transform.position.y + RLL.transform.position.y);
 
         if (averageHeight != 0)
-            averageHeight /= 6;
+            averageHeight /= (leftLegs.Length + rightLegs.Length);
 
         float offset = averageHeight;
 
