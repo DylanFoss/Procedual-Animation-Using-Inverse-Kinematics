@@ -7,6 +7,7 @@ public class LegStepper : MonoBehaviour
 {
     //TODO: Overshoot to be based on speed?
     //TODO: Overshoot currently can overshoot into floors/walls. Raycasts and/or velocity checks to correct this?
+    //TODO: Escape distance is leg is too far behind?
 
     [SerializeField] private Transform root;
 
@@ -26,6 +27,7 @@ public class LegStepper : MonoBehaviour
 
     [SerializeField] private int layerMask = 1 << 8;
 
+    [SerializeField] private CreatureController controller; 
 
     public bool moving;
 
@@ -44,6 +46,16 @@ public class LegStepper : MonoBehaviour
         get { return Mathf.Abs((transform.position - homeTransform.position).magnitude); }
     }
 
+    public void OnEnable()
+    {
+        FloorRaycast();
+    }
+
+    public void Start()
+    {
+        FloorRaycast();
+    }
+
 
     IEnumerator MoveToHome()
     {
@@ -58,13 +70,40 @@ public class LegStepper : MonoBehaviour
 
         Vector3 towardHome = (homeTransform.position - transform.position);
 
-        float overshootDistance = stepAtDistance * stepOvershootFraction;
-        Vector3 overshootVector = towardHome * overshootDistance;
+        //Linear velocity overshoot
 
-        overshootVector = Vector3.ProjectOnPlane(overshootVector, Vector3.up);
+        Vector3 unitVector = Vector3.Normalize(controller.CurrentVelocity);
 
-        //Vector3 endPoint = homeTransform.position;
-        Vector3 endPoint = homeTransform.position + overshootVector;
+
+       // float overshootDistance = stepAtDistance * stepOvershootFraction; //Mathf.Min(0.05f * Vector3.Magnitude(controller.CurrentVelocity), stepAtDistance/2-0.1f);
+       //Vector3 overshootVector = towardHome * overshootDistance;
+
+        //overshootVector = Vector3.ProjectOnPlane(overshootVector, Vector3.up);
+
+        Vector3 endPoint = homeTransform.position;
+
+        //rotational velocity overshoot
+
+        // Vector3 endPoint = homeTransform.position + overshootVector;
+
+        //is the overshoot within the "new homePostion"? if not, put it *on* the circle edge.
+        // if (Mathf.Pow((endPoint.x - homeTransform.position.x),2) + Mathf.Pow((endPoint.y - homeTransform.position.y), 2) + Mathf.Pow((endPoint.z - homeTransform.position.z), 2) > Mathf.Pow((stepAtDistance),2))
+        // endPoint = homeTransform.position + (Vector3.Normalize(overshootVector)*stepAtDistance);
+
+        //use SIGN instead of branch
+
+        if (controller.CurrentAngularVelocity > 0)
+        {
+            endPoint -= Vector3.Normalize(startPoint - endPoint) * stepOvershootFraction * (controller.CurrentAngularVelocity / controller.TurnSpeed) * 2;
+        }
+        else
+        {
+            endPoint += Vector3.Normalize(startPoint - endPoint) * stepOvershootFraction * (controller.CurrentAngularVelocity / controller.TurnSpeed) * 2;
+        }
+
+        endPoint += unitVector * stepAtDistance * stepOvershootFraction;
+
+
 
         Vector3 centerPoint = (startPoint + endPoint) / 2;
         centerPoint += homeTransform.up * Vector3.Distance(startPoint, endPoint) * stepHeight;
@@ -101,20 +140,6 @@ public class LegStepper : MonoBehaviour
         moving = false;
     }
 
-    // Start is called before the first frame update
-    public void OnEnable()
-    {
-       // epic.parent = root;
-        //epic.position = homeTransform.position;
-        FloorRaycast();
-    }
-
-    public void Start()
-    {
-        //epic.parent = root;
-       // epic.position = homeTransform.position;
-        FloorRaycast();
-    }
 
     // Update is called once per frame
     public void Update()

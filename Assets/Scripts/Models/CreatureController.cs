@@ -25,7 +25,21 @@ public class CreatureController : MonoBehaviour
     private float minDistToTarget;
 
     Vector3 currentVelocity;
+    public Vector3 CurrentVelocity
+    {
+        get { return currentVelocity; }
+    }
+
+
     float currentAngularVelocity;
+    public float CurrentAngularVelocity
+    {
+        get { return currentAngularVelocity; }
+    }
+    public float TurnSpeed
+    {
+        get { return turnSpeed; }
+    }
 
     [SerializeField] float damper;
 
@@ -50,10 +64,17 @@ public class CreatureController : MonoBehaviour
 
     //public AnimationCurve sensitivityCurve;
 
+
     enum Gait
     {
         Alternate,
         Wave
+    }
+
+    CreatureController()
+    {
+        currentVelocity = new Vector3(0, 0, 0);
+        currentAngularVelocity = 0;
     }
 
 
@@ -144,11 +165,10 @@ public class CreatureController : MonoBehaviour
 
         while (true)
         {
-            if (tripodGaitDistance(true) / 3 > tripodGaitDistance(false) / 3)
+            if (tripodGaitDistance(true) / leftLegs.Length > tripodGaitDistance(false) / leftLegs.Length)
             {
                 do
                 {
-
                     for (int i = 0; i < leftLegs.Length; i++)
                     {
                         if (i % 2 == 0)
@@ -294,10 +314,11 @@ public class CreatureController : MonoBehaviour
         // Angles in Unity are clockwise, so a positive angle here means to our right
 
         if (Input.GetKey("d"))
-            targetAngularVelocity = turnSpeed;
+            targetAngularVelocity = Mathf.Lerp(turnSpeed, turnSpeed*0.6f, Vector3.Magnitude(currentVelocity)); // this lerp inversely slows turn speed relative to speed;
 
         if (Input.GetKey("a"))
-            targetAngularVelocity = -turnSpeed;
+            targetAngularVelocity = Mathf.Lerp(-turnSpeed, -turnSpeed * 0.6f, Vector3.Magnitude(currentVelocity)/speed);
+
 
 
         // Use our smoothing function to gradually change the velocity
@@ -425,6 +446,7 @@ public class CreatureController : MonoBehaviour
     void Update()
     {
         //RootMotionUpdate();
+       // Debug.Log("Linear Velocity: " + currentVelocity + "; Angular Velocity: " + currentAngularVelocity);
     }
 
     private void LateUpdate()
