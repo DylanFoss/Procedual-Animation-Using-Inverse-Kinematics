@@ -46,6 +46,11 @@ public class LegStepper : MonoBehaviour
         get { return Mathf.Abs((transform.position - homeTransform.position).magnitude); }
     }
 
+    public float StepAtDistance
+    {
+        get { return stepAtDistance; }
+    }
+
     public void OnEnable()
     {
         FloorRaycast();

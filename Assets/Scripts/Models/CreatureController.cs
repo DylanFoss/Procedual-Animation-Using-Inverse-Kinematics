@@ -167,6 +167,20 @@ public class CreatureController : MonoBehaviour
 
         while (true)
         {
+            //Escape Distance
+            //TODO: base distance on leg length vs distance + value (longer legged creatures can wait longer)
+            foreach (var leg in rightLegs)
+            {
+                if (leg.DistanceFromHome > leg.StepAtDistance + 0.5f)
+                       leg.TryMove();
+            }
+
+            foreach (var leg in leftLegs)
+            {
+                if (leg.DistanceFromHome > leg.StepAtDistance + 0.5f)
+                    leg.TryMove();
+            }
+
             if (tripodGaitDistance(true) / leftLegs.Length > tripodGaitDistance(false) / leftLegs.Length)
             {
                 do
@@ -423,6 +437,7 @@ public class CreatureController : MonoBehaviour
         );
     }
 
+    //TODO: make this work for 6+ legs
     public void orientBodyFrontBack()
     {
         float fronttLegHeight = leftLegs[0].transform.position.y + rightLegs[0].transform.position.y;
