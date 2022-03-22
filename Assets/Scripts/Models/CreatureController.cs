@@ -5,7 +5,6 @@ using UnityEditor;
 
 public class CreatureController : MonoBehaviour
 {
-    //TODO: get legs into a data structure
     //TODO: force leg side priotrities to alternate
     //TODO: implement support for multiple gaits
     //TODO: implement debug flags to turn certain debug visuals on and off
@@ -51,15 +50,18 @@ public class CreatureController : MonoBehaviour
     [SerializeField] LegStepper[] leftLegs;
     [SerializeField] LegStepper[] rightLegs;
 
+    private bool isSelected = false;
+    public bool IsSelected { get { return isSelected; } set { isSelected = value; } }
+
     // to be replaced by arrays above
 
     //[SerializeField] LegStepper FRL;
     //[SerializeField] LegStepper FLL;
 
     //[SerializeField] LegStepper MRL;
-   // [SerializeField] LegStepper MLL;
+    // [SerializeField] LegStepper MLL;
 
-   // [SerializeField] LegStepper RRL;
+    // [SerializeField] LegStepper RRL;
     //[SerializeField] LegStepper RLL;
 
     //public AnimationCurve sensitivityCurve;
@@ -313,11 +315,16 @@ public class CreatureController : MonoBehaviour
 
         // Angles in Unity are clockwise, so a positive angle here means to our right
 
-        if (Input.GetKey("d"))
-            targetAngularVelocity = Mathf.Lerp(turnSpeed, turnSpeed*0.6f, Vector3.Magnitude(currentVelocity)); // this lerp inversely slows turn speed relative to speed;
+        // messy check
+        if (isSelected)
+        {
 
-        if (Input.GetKey("a"))
-            targetAngularVelocity = Mathf.Lerp(-turnSpeed, -turnSpeed * 0.6f, Vector3.Magnitude(currentVelocity)/speed);
+            if (Input.GetKey("d"))
+                targetAngularVelocity = Mathf.Lerp(turnSpeed, turnSpeed * 0.6f, Vector3.Magnitude(currentVelocity)); // this lerp inversely slows turn speed relative to speed;
+
+            if (Input.GetKey("a"))
+                targetAngularVelocity = Mathf.Lerp(-turnSpeed, -turnSpeed * 0.6f, Vector3.Magnitude(currentVelocity) / speed);
+        }
 
 
 
@@ -335,13 +342,18 @@ public class CreatureController : MonoBehaviour
 
         Vector3 targetVelocity = Vector3.zero;
 
-        if (Input.GetKey("w"))
-        {
-            targetVelocity = moveSpeed * root.transform.forward;
-        }
-        if (Input.GetKey("s"))
-        {
-            targetVelocity = moveSpeed * -root.transform.forward;
+
+        // messy check
+        if (isSelected)
+        { 
+            if (Input.GetKey("w"))
+            {
+                targetVelocity = moveSpeed * root.transform.forward;
+            }
+            if (Input.GetKey("s"))
+            {
+                targetVelocity = moveSpeed * -root.transform.forward;
+            }
         }
 
         currentVelocity = Vector3.Lerp(

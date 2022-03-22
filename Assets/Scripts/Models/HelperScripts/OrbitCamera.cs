@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+//TODO: move nescessary controls to it's own class and clear out unruly code
+//TODO: reset cam // free cam?
 [RequireComponent(typeof(Camera))]
 public class OrbitCamera : MonoBehaviour
 {
     [SerializeField] Transform focus = default;
+    private CreatureController controller = null;
 
     //Distances
 
@@ -103,6 +106,8 @@ public class OrbitCamera : MonoBehaviour
         }
     }
 
+    //warning: this code isn't good but I needed it working last minute
+    //TODO: cache last rig so it is easier to access
     void SwitchFocusPoint()
     {
         if (Input.GetMouseButton(1))
@@ -119,15 +124,14 @@ public class OrbitCamera : MonoBehaviour
 
                 if (hitInfo.transform.gameObject.GetComponentInParent<CreatureController>())
                 {
-                    focus = hitInfo.transform.gameObject.GetComponentInParent<CreatureController>().root;
+                    if (controller != null)
+                        controller.IsSelected = false;
+
+                    controller = hitInfo.transform.gameObject.GetComponentInParent<CreatureController>();
+                    focus = controller.root;
+                    controller.IsSelected = true;
                 }
             }
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Handles.color = Color.red;
-        Handles.DrawLine(GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition) , GetComponent<Camera>().transform.position);
     }
 }
