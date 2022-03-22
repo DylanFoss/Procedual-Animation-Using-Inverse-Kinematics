@@ -576,9 +576,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 629499633}
   rayTransform: {fileID: 76270288}
-  stepAtDistance: 2.5
+  stepAtDistance: 3
   moveDuration: 0.2
-  stepOvershootFraction: 1
+  stepOvershootFraction: 0.1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -1710,9 +1710,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 1511625851}
   rayTransform: {fileID: 1379211180}
-  stepAtDistance: 2.5
+  stepAtDistance: 3
   moveDuration: 0.2
-  stepOvershootFraction: 1
+  stepOvershootFraction: 0.1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -1953,9 +1953,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 563731541}
   rayTransform: {fileID: 1315318796}
-  stepAtDistance: 2.5
+  stepAtDistance: 3
   moveDuration: 0.2
-  stepOvershootFraction: 1
+  stepOvershootFraction: 0.1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -4948,9 +4948,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 91650564}
   rayTransform: {fileID: 1775451382}
-  stepAtDistance: 2.5
+  stepAtDistance: 3
   moveDuration: 0.2
-  stepOvershootFraction: 1
+  stepOvershootFraction: 0.1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -7925,9 +7925,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 118353312}
   rayTransform: {fileID: 33617830}
-  stepAtDistance: 2.5
+  stepAtDistance: 3
   moveDuration: 0.2
-  stepOvershootFraction: 1
+  stepOvershootFraction: 0.1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -9359,9 +9359,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 2133251000}
   rayTransform: {fileID: 1575693310}
-  stepAtDistance: 2.5
+  stepAtDistance: 3
   moveDuration: 0.2
-  stepOvershootFraction: 1
+  stepOvershootFraction: 0.1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -10724,7 +10724,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939837065306, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: moveSpeed
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939899590988, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepHeight
@@ -10732,11 +10732,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939899590988, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepAtDistance
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939899590988, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepOvershootFraction
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8772141940135209965, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepHeight
@@ -10744,11 +10744,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141940135209965, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepAtDistance
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8772141940135209965, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepOvershootFraction
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8772141940457107988, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepHeight
@@ -10756,11 +10756,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141940457107988, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepAtDistance
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8772141940457107988, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepOvershootFraction
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941147481359, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepHeight
@@ -10768,11 +10768,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941147481359, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepAtDistance
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941147481359, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepOvershootFraction
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941452770900, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepHeight
@@ -10780,11 +10780,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941452770900, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepAtDistance
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941452770900, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepOvershootFraction
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941494617335, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepHeight
@@ -10792,11 +10792,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941494617335, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepAtDistance
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8772141941494617335, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepOvershootFraction
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
@@ -10862,6 +10862,22 @@ PrefabInstance:
     - target: {fileID: 4347775472129513554, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4347775472156652443, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
+      propertyPath: stepOvershootFraction
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4347775472229232261, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
+      propertyPath: stepOvershootFraction
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4347775472629752508, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
+      propertyPath: stepOvershootFraction
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4347775473013263119, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
+      propertyPath: stepOvershootFraction
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}

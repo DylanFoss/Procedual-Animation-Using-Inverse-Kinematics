@@ -75,38 +75,13 @@ public class LegStepper : MonoBehaviour
 
         Vector3 towardHome = (homeTransform.position - transform.position);
 
-        //Linear velocity overshoot
+        float overshootDistance = stepAtDistance * stepOvershootFraction;
+        Vector3 overshootVector = towardHome * overshootDistance;
 
-        Vector3 unitVector = Vector3.Normalize(controller.CurrentVelocity);
+        overshootVector = Vector3.ProjectOnPlane(overshootVector, Vector3.up);
 
-
-       // float overshootDistance = stepAtDistance * stepOvershootFraction; //Mathf.Min(0.05f * Vector3.Magnitude(controller.CurrentVelocity), stepAtDistance/2-0.1f);
-       //Vector3 overshootVector = towardHome * overshootDistance;
-
-        //overshootVector = Vector3.ProjectOnPlane(overshootVector, Vector3.up);
-
-        Vector3 endPoint = homeTransform.position;
-
-        //rotational velocity overshoot
-
-        // Vector3 endPoint = homeTransform.position + overshootVector;
-
-        //is the overshoot within the "new homePostion"? if not, put it *on* the circle edge.
-        // if (Mathf.Pow((endPoint.x - homeTransform.position.x),2) + Mathf.Pow((endPoint.y - homeTransform.position.y), 2) + Mathf.Pow((endPoint.z - homeTransform.position.z), 2) > Mathf.Pow((stepAtDistance),2))
-        // endPoint = homeTransform.position + (Vector3.Normalize(overshootVector)*stepAtDistance);
-
-        //use SIGN instead of branch
-
-        if (controller.CurrentAngularVelocity > 0)
-        {
-            endPoint -= Vector3.Normalize(startPoint - endPoint) * stepOvershootFraction * (controller.CurrentAngularVelocity / controller.TurnSpeed) * 2;
-        }
-        else
-        {
-            endPoint += Vector3.Normalize(startPoint - endPoint) * stepOvershootFraction * (controller.CurrentAngularVelocity / controller.TurnSpeed) * 2;
-        }
-
-        endPoint += unitVector * stepAtDistance * stepOvershootFraction;
+        //Vector3 endPoint = homeTransform.position;
+        Vector3 endPoint = homeTransform.position + overshootVector;
 
         //// TODO: Generalise FloorRaycast to take a more generic value instead of this
         Ray ray = new Ray(new Vector3(endPoint.x, endPoint.y + 5, endPoint.z), Vector3.down);
