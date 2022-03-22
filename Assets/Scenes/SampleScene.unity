@@ -576,9 +576,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 629499633}
   rayTransform: {fileID: 76270288}
-  stepAtDistance: 3
+  stepAtDistance: 2.5
   moveDuration: 0.2
-  stepOvershootFraction: 0.1
+  stepOvershootFraction: 1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -1710,9 +1710,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 1511625851}
   rayTransform: {fileID: 1379211180}
-  stepAtDistance: 3
+  stepAtDistance: 2.5
   moveDuration: 0.2
-  stepOvershootFraction: 0.1
+  stepOvershootFraction: 1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -1953,9 +1953,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 563731541}
   rayTransform: {fileID: 1315318796}
-  stepAtDistance: 3
+  stepAtDistance: 2.5
   moveDuration: 0.2
-  stepOvershootFraction: 0.1
+  stepOvershootFraction: 1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -4948,9 +4948,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 91650564}
   rayTransform: {fileID: 1775451382}
-  stepAtDistance: 3
+  stepAtDistance: 2.5
   moveDuration: 0.2
-  stepOvershootFraction: 0.1
+  stepOvershootFraction: 1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -7925,9 +7925,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 118353312}
   rayTransform: {fileID: 33617830}
-  stepAtDistance: 3
+  stepAtDistance: 2.5
   moveDuration: 0.2
-  stepOvershootFraction: 0.1
+  stepOvershootFraction: 1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -9359,9 +9359,9 @@ MonoBehaviour:
   root: {fileID: 1079025944}
   homeTransform: {fileID: 2133251000}
   rayTransform: {fileID: 1575693310}
-  stepAtDistance: 3
+  stepAtDistance: 2.5
   moveDuration: 0.2
-  stepOvershootFraction: 0.1
+  stepOvershootFraction: 1
   stepHeight: 0.5
   layerMask: 8
   controller: {fileID: 1984554770}
@@ -10684,7 +10684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8454736633843027094, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.9
+      value: 6.3
       objectReference: {fileID: 0}
     - target: {fileID: 8454736633843027094, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: m_LocalPosition.y
@@ -10692,7 +10692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8454736633843027094, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.915475
+      value: 19.4
       objectReference: {fileID: 0}
     - target: {fileID: 8454736633843027094, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10721,6 +10721,10 @@ PrefabInstance:
     - target: {fileID: 8454736633843027094, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8772141939837065306, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
+      propertyPath: moveSpeed
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939899590988, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: stepHeight
@@ -10821,7 +10825,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4347775472129513554, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.9
+      value: -4.2
       objectReference: {fileID: 0}
     - target: {fileID: 4347775472129513554, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
       propertyPath: m_LocalPosition.y
