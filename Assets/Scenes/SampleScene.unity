@@ -10055,7 +10055,7 @@ MonoBehaviour:
   moveAcceleration: 10
   turnSpeed: 80
   turnAcceleration: 30
-  damper: 10
+  damper: 25
   root: {fileID: 1079025944}
   target: {fileID: 1334886473}
   leftLegs:
@@ -10723,6 +10723,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939837065306, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
+      propertyPath: damper
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8772141939837065306, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: moveSpeed
       value: 12
       objectReference: {fileID: 0}
@@ -10814,6 +10818,10 @@ PrefabInstance:
     - target: {fileID: 4347775472129513552, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4347775472129513553, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
+      propertyPath: damper
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4347775472129513553, guid: 86c6bb9507b224c40851daf2cd1bda04, type: 3}
       propertyPath: target
