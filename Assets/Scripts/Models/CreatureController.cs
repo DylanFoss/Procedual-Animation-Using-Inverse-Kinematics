@@ -43,7 +43,7 @@ public class CreatureController : MonoBehaviour
 
     [SerializeField] float damper;
 
-    [SerializeField] Transform root;
+    [SerializeField] public Transform root;
     [SerializeField] Transform target;
 
     //leg stepper objects
