@@ -103,7 +103,16 @@ public class LegStepper : MonoBehaviour
 
         endPoint += unitVector * stepAtDistance * stepOvershootFraction;
 
+        //// TODO: Generalise FloorRaycast to take a more generic value instead of this
+        Ray ray = new Ray(new Vector3(endPoint.x, endPoint.y + 5, endPoint.z), Vector3.down);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
+        {
+            endPoint = hitInfo.point;
+            Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
+        }
 
+        ////
 
         Vector3 centerPoint = (startPoint + endPoint) / 2;
         centerPoint += homeTransform.up * Vector3.Distance(startPoint, endPoint) * stepHeight;
