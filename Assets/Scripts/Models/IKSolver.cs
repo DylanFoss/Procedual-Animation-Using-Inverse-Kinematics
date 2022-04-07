@@ -20,7 +20,6 @@ public class IKSolver : MonoBehaviour
 
     public void Init()
     {
-        // stuff = new GameObject[length + 1];
 
         if (length == null)
         {
@@ -51,7 +50,6 @@ public class IKSolver : MonoBehaviour
             current = current.parent;
         }
         
-       // endEffector = null;
     }
 
     private void Awake()
@@ -76,21 +74,7 @@ public class IKSolver : MonoBehaviour
         Init();
     }
 
-    private void OnDrawGizmos()
-    {
-        var current = this.transform;
-        for (int i = 0; i < length && current != null && current.parent != null; i++)
-        {
-            var scale = Vector3.Distance(current.position, current.parent.position) * 0.1f;
-            Handles.matrix = Matrix4x4.TRS(current.position, Quaternion.FromToRotation(Vector3.up, current.parent.position - current.position), new Vector3(scale, Vector3.Distance(current.parent.position, current.position), scale));
-            Handles.color = Color.blue;
-            Handles.DrawWireCube(Vector2.up * 0.5f, Vector3.one);
-            current = current.parent;
-        }
 
-    }
-
-    //TODO: could add check for if it's impossible to reach, then strech rather than waiting through each iteration.
     public void Solve()
     {
 
@@ -171,5 +155,19 @@ public class IKSolver : MonoBehaviour
             Vector3 dir = (points[i] - points[i - 1]).normalized;
             points[i] = points[i - 1] + dir * lengths[i - 1];
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        var current = this.transform;
+        for (int i = 0; i < length && current != null && current.parent != null; i++)
+        {
+            var scale = Vector3.Distance(current.position, current.parent.position) * 0.1f;
+            Handles.matrix = Matrix4x4.TRS(current.position, Quaternion.FromToRotation(Vector3.up, current.parent.position - current.position), new Vector3(scale, Vector3.Distance(current.parent.position, current.position), scale));
+            Handles.color = Color.blue;
+            Handles.DrawWireCube(Vector2.up * 0.5f, Vector3.one);
+            current = current.parent;
+        }
+
     }
 }
