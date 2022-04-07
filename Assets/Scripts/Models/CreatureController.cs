@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class CreatureController : MonoBehaviour
 {
-    //TODO: force leg side priotrities to alternate
+    //TODO: 
     //TODO: implement support for multiple gaits
     //TODO: implement debug flags to turn certain debug visuals on and off
 
@@ -53,18 +53,6 @@ public class CreatureController : MonoBehaviour
     private bool isSelected = false;
     public bool IsSelected { get { return isSelected; } set { isSelected = value; } }
 
-    // to be replaced by arrays above
-
-    //[SerializeField] LegStepper FRL;
-    //[SerializeField] LegStepper FLL;
-
-    //[SerializeField] LegStepper MRL;
-    // [SerializeField] LegStepper MLL;
-
-    // [SerializeField] LegStepper RRL;
-    //[SerializeField] LegStepper RLL;
-
-    //public AnimationCurve sensitivityCurve;
 
 
     enum Gait
@@ -84,6 +72,34 @@ public class CreatureController : MonoBehaviour
     void Awake()
     {
         StartCoroutine(LegUpdateCoroutine());
+    }
+
+    void OnEnable()
+    {
+        StartCoroutine(LegUpdateCoroutine());
+    }
+
+    void OnDisable()
+    {
+        StopCoroutine(LegUpdateCoroutine());
+    }
+
+    private void LateUpdate()
+    {
+        //CalculateOrientation();
+        RootMotionUpdate();
+    }
+
+    void RootMotionUpdate()
+    {
+        move();
+
+        // change root height based on leg heights
+        orientBodyOffset();
+
+        orientBodyLeftRight();
+
+        orientBodyFrontBack();
     }
 
     public float tripodGaitDistance(bool lr)
@@ -231,27 +247,6 @@ public class CreatureController : MonoBehaviour
 
     }
 
-
-    void RootMotionUpdate()
-    {
-        //targetMovement();
-
-        move();
-
-
-        // change root height based on leg heights
-
-        orientBodyOffset();
-
-        //this code is evil and WILL release daemons into this dimension. Use at own risk.
-
-        orientBodyLeftRight();
-
-        ////front back rotation
-
-        orientBodyFrontBack();
-    }
-
     public void targetMovement()
     {
         // rotate root to face target
@@ -320,6 +315,7 @@ public class CreatureController : MonoBehaviour
         root.transform.position += currentVelocity * Time.deltaTime;
     }
 
+    // TODO: clean up WASD movemnt to own function.
     public void move()
     {
         float targetAngularVelocity = 0;
@@ -380,8 +376,9 @@ public class CreatureController : MonoBehaviour
         root.transform.position += currentVelocity * Time.deltaTime;
     }
 
-    float speed = 0;
-
+    /// <summary>
+    /// Iterates over the height (relative to the world Y cordinate) of each leg, and moves the creatures root up.
+    /// </summary>
     public void orientBodyOffset()
     {
         float averageHeight = 0;
@@ -391,25 +388,23 @@ public class CreatureController : MonoBehaviour
             averageHeight += leftLegs[i].Y + rightLegs[i].Y;
         }
 
-        //float averageHeight = (FRL.transform.position.y + FLL.transform.position.y + MRL.transform.position.y + MLL.transform.position.y + RRL.transform.position.y + RLL.transform.position.y);
-
         if (averageHeight != 0)
             averageHeight /= (leftLegs.Length + rightLegs.Length);
 
         float offset = averageHeight;
-
         float heightOffset = distanceFromGround;
+
+        float speed = 0;
 
         //root.position = new Vector3(root.position.x, heightOffset + offset, root.position.z);
         root.position = new Vector3(root.position.x, Mathf.SmoothDamp(root.position.y,  heightOffset + offset , ref speed, 0.2f), root.position.z);
     }
 
     /// <summary>
-    /// Orients the root
+    /// Rotate the creatures root left and right based on 
     /// </summary>
     public void orientBodyLeftRight()
     {
-        //left right rotation
 
         float leftLegHeight = 0;
         float rightLegHeight = 0;
@@ -428,8 +423,9 @@ public class CreatureController : MonoBehaviour
 
         float rotationDegrees = delta * 2f;
 
-        Quaternion test = Quaternion.Euler(root.transform.eulerAngles.x, root.transform.eulerAngles.y, rotationDegrees * -1); //new Vector3(root.transform.eulerAngles.x, root.transform.eulerAngles.y, rotationDegrees * -1);
+        Quaternion test = Quaternion.Euler(root.transform.eulerAngles.x, root.transform.eulerAngles.y, rotationDegrees * -1);
 
+        // lerp the rotation based on damper value
         root.transform.rotation = Quaternion.Slerp(
             root.transform.rotation,
             test,
@@ -437,7 +433,9 @@ public class CreatureController : MonoBehaviour
         );
     }
 
-    //TODO: make this work for 6+ legs
+    /// <summary>
+    /// Rotate the creatures root forwards and back based on front legs length and back legs length.
+    /// </summary>
     public void orientBodyFrontBack()
     {
         float fronttLegHeight = leftLegs[0].transform.position.y + rightLegs[0].transform.position.y;
@@ -460,26 +458,13 @@ public class CreatureController : MonoBehaviour
 
         if (root.transform.eulerAngles.x > 180)
         {
-            root.transform.rotation = Quaternion.Euler(root.transform.eulerAngles.x - 360, root.transform.eulerAngles.y, root.transform.eulerAngles.z); //root.transform.eulerAngles = new Vector3(root.transform.eulerAngles.x - 360, root.transform.eulerAngles.y, root.transform.eulerAngles.z);
+            root.transform.rotation = Quaternion.Euler(root.transform.eulerAngles.x - 360, root.transform.eulerAngles.y, root.transform.eulerAngles.z); 
 
         }
         if (root.transform.eulerAngles.z > 180)
         {
-            root.transform.rotation = Quaternion.Euler(root.transform.eulerAngles.x, root.transform.eulerAngles.y - 360, root.transform.eulerAngles.z); //root.transform.eulerAngles = new Vector3(root.transform.eulerAngles.x, root.transform.eulerAngles.y - 360, root.transform.eulerAngles.z);
+            root.transform.rotation = Quaternion.Euler(root.transform.eulerAngles.x, root.transform.eulerAngles.y - 360, root.transform.eulerAngles.z);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //RootMotionUpdate();
-       // Debug.Log("Linear Velocity: " + currentVelocity + "; Angular Velocity: " + currentAngularVelocity);
-    }
-
-    private void LateUpdate()
-    {
-        //CalculateOrientation();
-        RootMotionUpdate();
     }
 
     private void OnDrawGizmos()

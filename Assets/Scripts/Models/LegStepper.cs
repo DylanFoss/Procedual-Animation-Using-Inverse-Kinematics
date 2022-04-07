@@ -6,16 +6,12 @@ using UnityEditor;
 public class LegStepper : MonoBehaviour
 {
     //TODO: Overshoot to be based on speed?
-    //TODO: Overshoot currently can overshoot into floors/walls. Raycasts and/or velocity checks to correct this?
-    //TODO: Escape distance is leg is too far behind?
 
     [SerializeField] private Transform root;
 
     [SerializeField] private Transform homeTransform;
 
     [SerializeField] private Transform rayTransform;
-
-    //private Vector3 rayPoint;
 
     [SerializeField] private float stepAtDistance;
 
@@ -80,20 +76,7 @@ public class LegStepper : MonoBehaviour
         Vector3 unitVector = Vector3.Normalize(controller.CurrentVelocity);
 
 
-       // float overshootDistance = stepAtDistance * stepOvershootFraction; //Mathf.Min(0.05f * Vector3.Magnitude(controller.CurrentVelocity), stepAtDistance/2-0.1f);
-       //Vector3 overshootVector = towardHome * overshootDistance;
-
-        //overshootVector = Vector3.ProjectOnPlane(overshootVector, Vector3.up);
-
         Vector3 endPoint = homeTransform.position;
-
-        //rotational velocity overshoot
-
-        // Vector3 endPoint = homeTransform.position + overshootVector;
-
-        //is the overshoot within the "new homePostion"? if not, put it *on* the circle edge.
-        // if (Mathf.Pow((endPoint.x - homeTransform.position.x),2) + Mathf.Pow((endPoint.y - homeTransform.position.y), 2) + Mathf.Pow((endPoint.z - homeTransform.position.z), 2) > Mathf.Pow((stepAtDistance),2))
-        // endPoint = homeTransform.position + (Vector3.Normalize(overshootVector)*stepAtDistance);
 
         //use SIGN instead of branch
 
