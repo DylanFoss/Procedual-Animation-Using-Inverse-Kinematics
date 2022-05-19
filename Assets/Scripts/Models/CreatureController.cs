@@ -376,6 +376,8 @@ public class CreatureController : MonoBehaviour
         root.transform.position += currentVelocity * Time.deltaTime;
     }
 
+    float speed = 0;
+
     /// <summary>
     /// Iterates over the height (relative to the world Y cordinate) of each leg, and moves the creatures root up.
     /// </summary>
@@ -394,7 +396,7 @@ public class CreatureController : MonoBehaviour
         float offset = averageHeight;
         float heightOffset = distanceFromGround;
 
-        float speed = 0;
+
 
         //root.position = new Vector3(root.position.x, heightOffset + offset, root.position.z);
         root.position = new Vector3(root.position.x, Mathf.SmoothDamp(root.position.y,  heightOffset + offset , ref speed, 0.2f), root.position.z);

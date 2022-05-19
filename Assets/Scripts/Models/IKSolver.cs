@@ -21,7 +21,7 @@ public class IKSolver : MonoBehaviour
     public void Init()
     {
 
-        if (length == null)
+        if (length == 0)
         {
             length = 2;
         }
@@ -45,7 +45,7 @@ public class IKSolver : MonoBehaviour
             {
                 lengths[i] = (bones[i + 1].position - current.position).magnitude; //current.position
                 cumLength += lengths[i];
-            }
+            } 
 
             current = current.parent;
         }
