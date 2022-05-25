@@ -5,8 +5,6 @@ using UnityEditor;
 
 public class LegStepper : MonoBehaviour
 {
-    //TODO: Overshoot to be based on speed?
-
     [SerializeField] private CreatureController controller;
 
     [SerializeField] private Transform homeTransform;
@@ -83,7 +81,7 @@ public class LegStepper : MonoBehaviour
 
         endPoint += unitVector * stepAtDistance;
 
-        //// TODO: Generalise FloorRaycast to take a more generic value instead of this
+ 
         Ray ray = new Ray(new Vector3(endPoint.x, endPoint.y + 5, endPoint.z), Vector3.down);
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask))
@@ -92,7 +90,6 @@ public class LegStepper : MonoBehaviour
             Debug.DrawLine(ray.origin, hitInfo.point, Color.red);
         }
 
-        ////
 
         Vector3 centerPoint = (startPoint + endPoint) / 2;
         centerPoint += homeTransform.up * Vector3.Distance(startPoint, endPoint) * stepHeight;
@@ -100,13 +97,10 @@ public class LegStepper : MonoBehaviour
         float timeElapsed = 0;
         do
         {
-                // Add time since last frame to the time elapsed
                 timeElapsed += Time.deltaTime;
 
                 float normalizedTime = timeElapsed / moveDuration;
 
-                // Interpolate position and rotation
-               // transform.position = Vector3.Lerp(startPoint, endPoint, normalizedTime);
                 transform.rotation = Quaternion.Slerp(startRot, endRot, normalizedTime);
 
                 // Quadratic bezier curve, nice and easy to set up custom steps for.
@@ -142,10 +136,8 @@ public class LegStepper : MonoBehaviour
 
         float distFromHome = Vector3.Distance(transform.position, homeTransform.position);
 
-        // If we are too far off in position or rotation
         if (distFromHome > stepAtDistance)
         {
-            // Start the step coroutine
             StartCoroutine(MoveToHome());
         }
     }

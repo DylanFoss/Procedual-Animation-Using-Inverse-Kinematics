@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-//TODO: move nescessary controls to it's own class and clear out unruly code
-//TODO: reset cam // free cam?
+
 [RequireComponent(typeof(Camera))]
 public class OrbitCamera : MonoBehaviour
 {
@@ -107,13 +106,10 @@ public class OrbitCamera : MonoBehaviour
     }
 
     //warning: this code isn't good but I needed it working last minute
-    //TODO: cache last rig so it is easier to access
     void SwitchFocusPoint()
     {
         if (Input.GetMouseButton(1))
         {
-            Debug.Log("Mouse2");
-
             Ray ray = transform.gameObject.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
 
