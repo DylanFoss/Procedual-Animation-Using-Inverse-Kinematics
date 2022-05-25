@@ -5,23 +5,17 @@ using UnityEditor;
 
 public class CreatureController : MonoBehaviour
 {
-    //TODO: 
-    //TODO: implement support for multiple gaits
-    //TODO: implement debug flags to turn certain debug visuals on and off
+
+    [SerializeField] public Transform root;
 
     // root body variables
     [SerializeField] float distanceFromGround;
-    [SerializeField] float desiredDistanceFromGround;
 
-    [SerializeField] float moveSpeed;
+    [SerializeField] float maxMoveSpeed;
     [SerializeField] float moveAcceleration;
 
-    [SerializeField] float turnSpeed;
+    [SerializeField] float maxTurnSpeed;
     [SerializeField] float turnAcceleration;
-
-    private float maxAngleToTarget;
-    private float maxDistToTarget;
-    private float minDistToTarget;
 
     Vector3 currentVelocity;
     public Vector3 CurrentVelocity
@@ -29,21 +23,18 @@ public class CreatureController : MonoBehaviour
         get { return currentVelocity; }
     }
 
-
     float currentAngularVelocity;
     public float CurrentAngularVelocity
     {
         get { return currentAngularVelocity; }
     }
-    public float TurnSpeed
+    public float MaxTurnSpeed
     {
-        get { return turnSpeed; }
+        get { return maxTurnSpeed; }
     }
 
-    [SerializeField] float damper;
 
-    [SerializeField] public Transform root;
-    [SerializeField] Transform target;
+    [SerializeField] float damper;
 
     //leg stepper objects
 
@@ -53,22 +44,12 @@ public class CreatureController : MonoBehaviour
     private bool isSelected = false;
     public bool IsSelected { get { return isSelected; } set { isSelected = value; } }
 
-
-
-    enum Gait
-    {
-        Alternate,
-        Wave
-    }
-
     CreatureController()
     {
         currentVelocity = new Vector3(0, 0, 0);
         currentAngularVelocity = 0;
     }
 
-
-    // Start is called before the first frame update
     void Awake()
     {
         StartCoroutine(LegUpdateCoroutine());
@@ -86,7 +67,6 @@ public class CreatureController : MonoBehaviour
 
     private void LateUpdate()
     {
-        //CalculateOrientation();
         RootMotionUpdate();
     }
 
@@ -94,11 +74,8 @@ public class CreatureController : MonoBehaviour
     {
         move();
 
-        // change root height based on leg heights
         orientBodyOffset();
-
         orientBodyLeftRight();
-
         orientBodyFrontBack();
     }
 
@@ -183,19 +160,6 @@ public class CreatureController : MonoBehaviour
 
         while (true)
         {
-            //Escape Distance
-            //TODO: base distance on leg length vs distance + value (longer legged creatures can wait longer)
-            foreach (var leg in rightLegs)
-            {
-                if (leg.DistanceFromHome > leg.StepAtDistance + 0.5f)
-                       leg.TryMove();
-            }
-
-            foreach (var leg in leftLegs)
-            {
-                if (leg.DistanceFromHome > leg.StepAtDistance + 0.5f)
-                    leg.TryMove();
-            }
 
             if (tripodGaitDistance(true) / leftLegs.Length > tripodGaitDistance(false) / leftLegs.Length)
             {
@@ -240,113 +204,23 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    //Based on leg placement, how should the body be oriented?
-    public void CalculateOrientation()
-    {
-
-
-    }
-
-    public void targetMovement()
-    {
-        // rotate root to face target
-        Vector3 towardTarget = target.position - root.transform.position;
-        // Vector toward target on the local XZ plane
-        Vector3 towardTargetProjected = Vector3.ProjectOnPlane(towardTarget, transform.up);
-        // Get the angle from the gecko's forward direction to the direction toward toward our target
-        // Here we get the signed angle around the up vector so we know which direction to turn in
-        float angToTarget = Vector3.SignedAngle(root.transform.forward, towardTargetProjected, root.transform.up);
-
-        float targetAngularVelocity = 0;
-
-        // If we are within the max angle (i.e. approximately facing the target)
-        // leave the target angular velocity at zero
-        if (Mathf.Abs(angToTarget) > maxAngleToTarget)
-        {
-            // Angles in Unity are clockwise, so a positive angle here means to our right
-            if (angToTarget > 0)
-            {
-                targetAngularVelocity = turnSpeed;
-            }
-            // Invert angular speed if target is to our left
-            else
-            {
-                targetAngularVelocity = -turnSpeed;
-            }
-        }
-
-        // Use our smoothing function to gradually change the velocity
-        currentAngularVelocity = Mathf.Lerp(
-        currentAngularVelocity,
-        targetAngularVelocity,
-        1 - Mathf.Exp(-turnAcceleration * Time.deltaTime)
-      );
-
-        // Rotate the transform around the Y axis in world space, 
-        // making sure to multiply by delta time to get a consistent angular velocity
-        root.transform.Rotate(0, Time.deltaTime * currentAngularVelocity, 0, Space.World);
-
-        Vector3 targetVelocity = Vector3.zero;
-
-        // Don't move if we're facing away from the target, just rotate in place
-        if (Mathf.Abs(angToTarget) < 90)
-        {
-            float distToTarget = Vector3.Distance(transform.position, target.position);
-
-            // If we're too far away, approach the target
-            if (distToTarget > maxDistToTarget)
-            {
-                targetVelocity = moveSpeed * towardTargetProjected.normalized;
-            }
-            // If we're too close, reverse the direction and move away
-            else if (distToTarget < minDistToTarget)
-            {
-                targetVelocity = moveSpeed * -towardTargetProjected.normalized;
-            }
-        }
-
-        currentVelocity = Vector3.Lerp(
-          currentVelocity,
-          targetVelocity,
-          1 - Mathf.Exp(-moveAcceleration * Time.deltaTime)
-        );
-
-        // Apply the velocity
-        root.transform.position += currentVelocity * Time.deltaTime;
-    }
-
     // TODO: clean up WASD movemnt to own function.
     public void move()
     {
         float targetAngularVelocity = 0;
 
-        // If we are within the max angle (i.e. approximately facing the target)
-        // leave the target angular velocity at zero
-
-        // Angles in Unity are clockwise, so a positive angle here means to our right
-
         // messy check
         if (isSelected)
-        {
-
-            if (Input.GetKey("d"))
-                targetAngularVelocity = Mathf.Lerp(turnSpeed, turnSpeed * 0.6f, Vector3.Magnitude(currentVelocity)); // this lerp inversely slows turn speed relative to speed;
-
-            if (Input.GetKey("a"))
-                targetAngularVelocity = Mathf.Lerp(-turnSpeed, -turnSpeed * 0.6f, Vector3.Magnitude(currentVelocity) / speed);
-        }
+            targetAngularVelocity = Mathf.Lerp(maxTurnSpeed * Input.GetAxisRaw("Horizontal"), maxTurnSpeed * Input.GetAxisRaw("Horizontal") * 0.6f, Vector3.Magnitude(currentVelocity));
 
 
 
-        // Use our smoothing function to gradually change the velocity
         currentAngularVelocity = Mathf.Lerp(
         currentAngularVelocity,
         targetAngularVelocity,
-        1 - Mathf.Exp(-turnAcceleration * Time.deltaTime)
-        );
+        1 - Mathf.Exp(-turnAcceleration * Time.deltaTime));
 
         // Rotate the transform around the Y axis in world space, 
-        // making sure to multiply by delta time to get a consistent angular velocity
         root.transform.Rotate(0, Time.deltaTime * currentAngularVelocity, 0, Space.World);
 
 
@@ -355,16 +229,7 @@ public class CreatureController : MonoBehaviour
 
         // messy check
         if (isSelected)
-        { 
-            if (Input.GetKey("w"))
-            {
-                targetVelocity = moveSpeed * root.transform.forward;
-            }
-            if (Input.GetKey("s"))
-            {
-                targetVelocity = moveSpeed * -root.transform.forward;
-            }
-        }
+            targetVelocity = maxMoveSpeed * root.transform.forward * Input.GetAxisRaw("Vertical");
 
         currentVelocity = Vector3.Lerp(
          currentVelocity,
@@ -376,7 +241,6 @@ public class CreatureController : MonoBehaviour
         root.transform.position += currentVelocity * Time.deltaTime;
     }
 
-    float speed = 0;
 
     /// <summary>
     /// Iterates over the height (relative to the world Y cordinate) of each leg, and moves the creatures root up.
@@ -397,9 +261,8 @@ public class CreatureController : MonoBehaviour
         float heightOffset = distanceFromGround;
 
 
-
         //root.position = new Vector3(root.position.x, heightOffset + offset, root.position.z);
-        root.position = new Vector3(root.position.x, Mathf.SmoothDamp(root.position.y,  heightOffset + offset , ref speed, 0.2f), root.position.z);
+        root.position = new Vector3(root.position.x, Mathf.SmoothDamp(root.position.y,  heightOffset + offset , ref currentVelocity.y, 0.2f), root.position.z);
     }
 
     /// <summary>
@@ -440,6 +303,9 @@ public class CreatureController : MonoBehaviour
     /// </summary>
     public void orientBodyFrontBack()
     {
+        if (leftLegs.Length == 1)
+            return;
+
         float fronttLegHeight = leftLegs[0].transform.position.y + rightLegs[0].transform.position.y;
         float backLegHeight = leftLegs[leftLegs.Length - 1].transform.position.y + rightLegs[rightLegs.Length - 1].transform.position.y;
 
@@ -456,32 +322,18 @@ public class CreatureController : MonoBehaviour
             1 - Mathf.Exp(-damper * Time.deltaTime)
         );
 
-        // cover for body rotations
-
+        
+        // Quarternion.Slerp takes the most direct rotation to the target. These guards prevent the body flipping upside down.
         if (root.transform.eulerAngles.x > 180)
         {
             root.transform.rotation = Quaternion.Euler(root.transform.eulerAngles.x - 360, root.transform.eulerAngles.y, root.transform.eulerAngles.z); 
 
         }
+
         if (root.transform.eulerAngles.z > 180)
         {
             root.transform.rotation = Quaternion.Euler(root.transform.eulerAngles.x, root.transform.eulerAngles.y - 360, root.transform.eulerAngles.z);
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (maxDistToTarget > Vector3.Distance(root.transform.position, target.position) && minDistToTarget < Vector3.Distance(root.transform.position, target.position))
-        {
-            Handles.color = Color.green;
-        }
-        else 
-        {
-            Handles.color = Color.red;
-        }
- 
-
-       // Handles.DrawLine(root.transform.position, target.position);
-
-    }
 }

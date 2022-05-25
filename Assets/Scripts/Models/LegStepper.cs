@@ -7,23 +7,19 @@ public class LegStepper : MonoBehaviour
 {
     //TODO: Overshoot to be based on speed?
 
-    [SerializeField] private Transform root;
+    [SerializeField] private CreatureController controller;
 
     [SerializeField] private Transform homeTransform;
-
-    [SerializeField] private Transform rayTransform;
 
     [SerializeField] private float stepAtDistance;
 
     [SerializeField] private float moveDuration;
 
-    [SerializeField] float stepOvershootFraction;
-
     [SerializeField] float stepHeight = 0.5f;
 
-    [SerializeField] private int layerMask = 1 << 8;
+    [SerializeField] private Transform rayTransform;
 
-    [SerializeField] private CreatureController controller; 
+    private int layerMask = 8;
 
     public bool moving;
 
@@ -69,27 +65,23 @@ public class LegStepper : MonoBehaviour
 
         // overshooting our end postion for more natrual movement
 
-        Vector3 towardHome = (homeTransform.position - transform.position);
-
-        //Linear velocity overshoot
-
-        Vector3 unitVector = Vector3.Normalize(controller.CurrentVelocity);
-
-
         Vector3 endPoint = homeTransform.position;
+        
 
-        //use SIGN instead of branch
-
+        //this branch is very unecessary.
         if (controller.CurrentAngularVelocity > 0)
         {
-            endPoint -= Vector3.Normalize(startPoint - endPoint) * stepOvershootFraction * (controller.CurrentAngularVelocity / controller.TurnSpeed) * 2;
+            endPoint -= Vector3.Normalize(startPoint - endPoint) * (controller.CurrentAngularVelocity / controller.MaxTurnSpeed) * 2;
         }
         else
         {
-            endPoint += Vector3.Normalize(startPoint - endPoint) * stepOvershootFraction * (controller.CurrentAngularVelocity / controller.TurnSpeed) * 2;
+            endPoint += Vector3.Normalize(startPoint - endPoint) * (controller.CurrentAngularVelocity / controller.MaxTurnSpeed) * 2;
         }
 
-        endPoint += unitVector * stepAtDistance * stepOvershootFraction;
+        //Linear velocity overshoot
+        Vector3 unitVector = Vector3.Normalize(controller.CurrentVelocity);
+
+        endPoint += unitVector * stepAtDistance;
 
         //// TODO: Generalise FloorRaycast to take a more generic value instead of this
         Ray ray = new Ray(new Vector3(endPoint.x, endPoint.y + 5, endPoint.z), Vector3.down);
@@ -106,7 +98,6 @@ public class LegStepper : MonoBehaviour
         centerPoint += homeTransform.up * Vector3.Distance(startPoint, endPoint) * stepHeight;
 
         float timeElapsed = 0;
-
         do
         {
                 // Add time since last frame to the time elapsed

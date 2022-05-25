@@ -5,17 +5,17 @@ using UnityEditor;
 
 public class IKSolver : MonoBehaviour
 {
-    public int length;
+    [SerializeField] int length;
 
-    public GameObject endEffector;
-    public GameObject pole;
+    [SerializeField] GameObject endEffector;
+    [SerializeField] GameObject pole;
 
-    public int iterations = 100;
-    public float minDistance = 0.01f;
+    [SerializeField] int maxIterations = 100;
+    [SerializeField] float minDistance = 0.01f;
 
     protected Transform[] bones;
     protected float[] lengths;
-    protected float cumLength; //cumulative
+    protected float cumulativeLength;
     protected Vector3[] points;
 
     public void Init()
@@ -30,7 +30,7 @@ public class IKSolver : MonoBehaviour
         points = new Vector3[length + 1];
         lengths = new float[length];
 
-        cumLength = 0;
+        cumulativeLength = 0;
 
         //init bones
         var current = transform;
@@ -38,13 +38,10 @@ public class IKSolver : MonoBehaviour
         {
             bones[i] = current;
 
-            if (i == bones.Length - 1)
-            {
-            }
-            else
+            if (i != bones.Length - 1)
             {
                 lengths[i] = (bones[i + 1].position - current.position).magnitude; //current.position
-                cumLength += lengths[i];
+                cumulativeLength += lengths[i];
             } 
 
             current = current.parent;
@@ -55,12 +52,6 @@ public class IKSolver : MonoBehaviour
     private void Awake()
     {
         Init();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    { 
-        
     }
 
     // Update is called once per frame
@@ -82,9 +73,7 @@ public class IKSolver : MonoBehaviour
             return;
 
         if (lengths.Length != length) // reinitialise chain if the number of chains differs from the lengths of chains
-        {
             Init();
-        }
 
         for (int i = 0; i < bones.Length; i++)
             points[i] = bones[i].position;
@@ -94,16 +83,16 @@ public class IKSolver : MonoBehaviour
         Vector3 target = endEffector.transform.position;
 
         // check if this is impossible to solve
-        if (Vector3.Distance(target, points[0]) > cumLength)
+        if (Vector3.Distance(target, points[0]) > cumulativeLength)
         {
-            var d = (endEffector.transform.position - points[0]).normalized;
+            var d = (target - origin).normalized;
 
             for (int i = 1; i < points.Length; i++)
                 points[i] = points[i - 1] + d * lengths[i-1];
         }
         else
         {
-            for (int i = 0; i < iterations; i++)
+            for (int i = 0; i < maxIterations; i++)
             {
                 Forwards(target);
                 Backwards(origin);
@@ -131,9 +120,8 @@ public class IKSolver : MonoBehaviour
         }
 
         for (int i = 0; i < points.Length; i++)
-        {
             bones[i].position = points[i];
-        }
+
 
     }
 
