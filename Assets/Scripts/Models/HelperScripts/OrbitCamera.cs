@@ -107,7 +107,6 @@ public class OrbitCamera : MonoBehaviour
     }
 
     //warning: this code isn't good but I needed it working last minute
-    //TODO: cache last rig so it is easier to access
     void SwitchFocusPoint()
     {
         if (Input.GetMouseButton(1))

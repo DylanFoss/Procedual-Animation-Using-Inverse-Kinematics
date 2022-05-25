@@ -204,7 +204,6 @@ public class CreatureController : MonoBehaviour
         }
     }
 
-    // TODO: clean up WASD movemnt to own function.
     public void move()
     {
         float targetAngularVelocity = 0;
@@ -261,7 +260,6 @@ public class CreatureController : MonoBehaviour
         float heightOffset = distanceFromGround;
 
 
-        //root.position = new Vector3(root.position.x, heightOffset + offset, root.position.z);
         root.position = new Vector3(root.position.x, Mathf.SmoothDamp(root.position.y,  heightOffset + offset , ref currentVelocity.y, 0.2f), root.position.z);
     }
 
