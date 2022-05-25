@@ -11411,10 +11411,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 1079025944}
   distanceFromGround: 5
-  maxMoveSpeed: 10
+  maxMoveSpeed: 12
   moveAcceleration: 4
-  maxTurnSpeed: 40
-  turnAcceleration: 80
+  maxTurnSpeed: 80
+  turnAcceleration: 20
   damper: 10
   leftLegs:
   - {fileID: 379302172}
@@ -12090,7 +12090,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939837065306, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: maxTurnSpeed
-      value: 60
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8772141939837065306, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
+      propertyPath: turnAcceleration
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8772141939837065306, guid: 08593ef401413f04c8b19cf72f755258, type: 3}
       propertyPath: maxMoveAcceleration
