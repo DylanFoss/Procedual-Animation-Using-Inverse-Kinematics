@@ -204,6 +204,7 @@ public class CreatureController : MonoBehaviour
         }
     }
 
+    // TODO: clean up WASD movemnt to own function.
     public void move()
     {
         float targetAngularVelocity = 0;

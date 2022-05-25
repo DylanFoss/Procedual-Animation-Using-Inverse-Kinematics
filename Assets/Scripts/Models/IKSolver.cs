@@ -40,7 +40,7 @@ public class IKSolver : MonoBehaviour
 
             if (i != bones.Length - 1)
             {
-                lengths[i] = (bones[i + 1].position - current.position).magnitude; 
+                lengths[i] = (bones[i + 1].position - current.position).magnitude; //current.position
                 cumulativeLength += lengths[i];
             } 
 
